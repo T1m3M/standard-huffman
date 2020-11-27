@@ -39,7 +39,7 @@ public class Huffman {
 		for(int i=0; i < unique.length(); i++) {
 			for(int j=0; j < allCodes.size(); j++) {
 
-				if (allCodes.get(j).getCode() == unique.charAt(i)) {
+				if (allCodes.get(j).getSym() == unique.charAt(i)) {
 					allCodes.get(j).printHuffCode();
 					break;
 				}
@@ -83,7 +83,7 @@ public class Huffman {
 		} 
 	}
 	
-    public static void genCode(TreeNode root, String prefix) {
+    private static void genCode(TreeNode root, String prefix) {
         if (root.left == null && root.right == null && Character.isLetter(root.c)) {
         	hCode = new HuffCode(root.c, prefix);
         	allCodes.add(hCode);
@@ -94,6 +94,29 @@ public class Huffman {
         genCode(root.left, prefix + "0");
         genCode(root.right, prefix + "1");
 	}
+    
+    private static void encoding() {
+    	
+    	String enc = "";
+    	
+		// encoding each character in data by the equivalent huffman code
+		for(int i=0; i < data.length(); i++) {
+			for(int j=0; j < allCodes.size(); j++) {
+
+				if (allCodes.get(j).getSym() == data.charAt(i)) {
+					enc += allCodes.get(j).getCode();
+					break;
+				}
+			}
+		}
+		
+		System.out.println("\nCompressed Data : " + enc + " (" + enc.length() + " bits)");
+    	
+    }
+    
+    private void entropy() {
+    	
+    }
 	
 	public void compress() {
 		
@@ -145,7 +168,9 @@ public class Huffman {
         // generate each symbol's code
         genCode(root, "");
         
-        printAllCodes();
+        printAllCodes(); // print the symbols and its Huffman codes
 		
+        encoding(); // encoding the data (compressing)
+        
 	}
 }
