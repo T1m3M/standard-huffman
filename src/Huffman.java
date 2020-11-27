@@ -64,7 +64,18 @@ public class Huffman {
 			
 			return -1;
 		} 
-	} 
+	}
+	
+    public static void genCode(TreeNode root, String prefix) {
+        if (root.left == null && root.right == null && Character.isLetter(root.c)) {
+        	System.out.println(root.c + ":" + prefix);
+  
+            return;
+        }
+        
+        genCode(root.left, prefix + "0");
+        genCode(root.right, prefix + "1");
+	}
 	
 	public void compress() {
 		
@@ -86,6 +97,35 @@ public class Huffman {
  
 			tree.add(node); // append to the tree
 		} 
+
+		// create the root node
+		TreeNode root = null;
+		
+		// extracting the sum nodes until there only one node left
+		while (tree.size() > 1) {
+			  
+			// getting the most minimum 2 nodes in the probabilities
+			TreeNode min1 = tree.peek();
+			tree.poll();
+			
+			TreeNode min2 = tree.peek();
+			tree.poll();
+		  
+			// sum node is resulting from summing the most minimum 2 nodes
+			TreeNode sNode = new TreeNode();
+			sNode.data = min1.data + min2.data;
+			sNode.c = '-'; 
+		  
+			// make the resulting node the parent of them
+			sNode.left = min1;
+			sNode.right = min2;
+			
+			root = sNode;   // make sNode the root node
+			tree.add(sNode);  // append to the tree
+		}
+  
+        // generate each symbol's code
+        genCode(root, ""); 
 		
 	}
 }
