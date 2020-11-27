@@ -7,6 +7,8 @@ public class Huffman {
 	private static String unique = "";
 	private static Prob prob;
 	private static ArrayList<Prob> allProbs = new ArrayList<Prob>();
+	private static HuffCode hCode;
+	private static ArrayList<HuffCode> allCodes = new ArrayList<HuffCode>();
 	
 	Huffman(String d){
 		data = d;
@@ -27,6 +29,21 @@ public class Huffman {
 		for(int i=0; i < allProbs.size(); i++) {
 			System.out.println( allProbs.get(i).getSym() + " = "
 					+ String.valueOf(allProbs.get(i).getProb()) );
+		}
+	}
+	
+	private void printAllCodes() {
+		System.out.println("\nSymbols' Codes: ");
+
+		// print by the order they have appeared in unique
+		for(int i=0; i < unique.length(); i++) {
+			for(int j=0; j < allCodes.size(); j++) {
+
+				if (allCodes.get(j).getCode() == unique.charAt(i)) {
+					allCodes.get(j).printHuffCode();
+					break;
+				}
+			}
 		}
 	}
 	
@@ -68,8 +85,9 @@ public class Huffman {
 	
     public static void genCode(TreeNode root, String prefix) {
         if (root.left == null && root.right == null && Character.isLetter(root.c)) {
-        	System.out.println(root.c + ":" + prefix);
-  
+        	hCode = new HuffCode(root.c, prefix);
+        	allCodes.add(hCode);
+        	
             return;
         }
         
@@ -125,7 +143,9 @@ public class Huffman {
 		}
   
         // generate each symbol's code
-        genCode(root, ""); 
+        genCode(root, "");
+        
+        printAllCodes();
 		
 	}
 }
