@@ -9,8 +9,12 @@ public class HuffCode {
 		code = c;
 	}
 	
-	public char getCode() {
+	public char getSym() {
 		return symbol;
+	}
+	
+	public String getCode() {
+		return code;
 	}
 	
 	public void printHuffCode(){
