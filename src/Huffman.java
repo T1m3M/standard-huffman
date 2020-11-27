@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class Huffman {
 	private static String data;
@@ -21,6 +23,7 @@ public class Huffman {
 	}
 	
 	private void printAllProbs() {
+		System.out.println("\nSymbols' Probabilities: ");
 		for(int i=0; i < allProbs.size(); i++) {
 			System.out.println( allProbs.get(i).getSym() + " = "
 					+ String.valueOf(allProbs.get(i).getProb()) );
@@ -49,12 +52,40 @@ public class Huffman {
 			prob = new Prob(unique.charAt(i), probability);
 			allProbs.add(prob);
 		}
-		
-		printAllProbs();
 	}
 	
+	// Customizing a comparing of nodes for easier use
+	class CompareNodes implements Comparator<TreeNode> { 
+		public int compare(TreeNode x, TreeNode y) {
+			
+			// because comparator's return must be an integer
+			if(x.data - y.data > 0)
+				return 1;
+			
+			return -1;
+		} 
+	} 
+	
 	public void compress() {
-		calcProb();
+		
+		calcProb(); // calculate the probabilities
+		printAllProbs(); // print the probabilities
+		
+		// make a priority queue of TreeNode's type objects
+		PriorityQueue<TreeNode> tree = new PriorityQueue<TreeNode>(allProbs.size(), new CompareNodes());
+		
+		// adding nodes to the tree
+		for (int i = 0; i < allProbs.size(); i++) {
+			TreeNode node = new TreeNode(); 
+  
+			node.c = allProbs.get(i).getSym(); // adding node symbol
+			node.data = allProbs.get(i).getProb(); // adding symbol's probability
+  
+			node.left = null; // child nodes
+			node.right = null; 
+ 
+			tree.add(node); // append to the tree
+		} 
 		
 	}
 }
