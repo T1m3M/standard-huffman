@@ -99,7 +99,7 @@ public class Huffman {
     	
     	String enc = "";
     	
-		// encoding each character in data by the equivalent huffman code
+		// encoding each character in data by the equivalent Huffman code
 		for(int i=0; i < data.length(); i++) {
 			for(int j=0; j < allCodes.size(); j++) {
 
@@ -110,12 +110,24 @@ public class Huffman {
 			}
 		}
 		
-		System.out.println("\nCompressed Data : " + enc + " (" + enc.length() + " bits)");
+		System.out.println("\nCompressed Data: " + enc + " (" + enc.length() + " bits)");
     	
     }
     
     private void entropy() {
+    	double entropy = 0;
+    	double p = 0;
     	
+    	// getting all probabilities for each symbol in the data
+    	for(int i=0; i < allProbs.size(); i++) {
+    		p = allProbs.get(i).getProb();
+    		entropy += p * (Math.log(1.0 / p) / Math.log(2));
+    	}
+    	
+    	System.out.println("Entropy: " + String.valueOf(entropy));
+    	System.out.println("The min. compression size possible: " +
+    			String.valueOf(Math.round(entropy * data.length()))
+    			+ " bits");
     }
 	
 	public void compress() {
@@ -171,6 +183,9 @@ public class Huffman {
         printAllCodes(); // print the symbols and its Huffman codes
 		
         encoding(); // encoding the data (compressing)
+        
+        entropy(); // calculating the entropy of the data
+        		   // and the best compression possible
         
 	}
 }
